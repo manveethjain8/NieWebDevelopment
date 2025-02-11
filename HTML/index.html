@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>First example</title>
+    </head>
+    <body>
+        <p id="myText">Click the add button</p>
+        <button id="addButton">Add</button>
+        <button id="resetButton">Reset</button>
+        <script>
+                document.getElementById('addButton').addEventListener('click',()=>{
+                    document.getElementById('myText').innerHTML="You have clicked the add button";
+                });
+            
+
+                document.getElementById('resetButton').addEventListener('click',()=>{
+                    document.getElementById('myText').innerHTML="Click the add button";
+                });
+
+                let a=10;
+                let b=20;
+                function add(a,b){
+                    return a+b;
+                }
+                let ans=add(a,b);
+                alert(ans);
+
+        </script>
+    </body>
+</html>

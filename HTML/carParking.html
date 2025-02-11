@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Parking System</title>
+
+    <!-- Bootstrap 4 CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="http://127.0.0.1:5502/HTML/pizzaModel.html">Add Car</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto mb-2"> 
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input id="searchInput" class="form-control mr-2" type="search" placeholder="Search" aria-label="Search" onkeyup="searchOrders()">
+                </form>
+                <!-- Buttons -->
+                <button class="btn btn-primary ml-3" data-toggle="modal" data-target="#registerCarModal">Add Car
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Car Table -->
+    <div class="container mt-4">
+        <h2>Registered Cars</h2>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Car Number</th>
+                    <th>Owner Name</th>
+                    <th>Parking Slot</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="carTableBody">
+                <!-- Dynamic Rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Register Car Modal -->
+    <div class="modal fade" id="registerCarModal" tabindex="-1" role="dialog" aria-labelledby="registerCarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerCarModalLabel">Register a New Car</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="carForm">
+                        <div class="form-group">
+                            <label for="carNumber">Id</label>
+                            <input type="text" class="form-control" id="carNumber" placeholder="Enter car number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ownerName">Name</label>
+                            <input type="text" class="form-control" id="ownerName" placeholder="Enter owner name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="parkingSlot">Size</label>
+                            <input type="text" class="form-control" id="parkingSlot" placeholder="Enter parking slot" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="carNumber">Category</label>
+                            <input type="text" class="form-control" id="carNumber" placeholder="Enter car number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ownerName">Price</label>
+                            <input type="text" class="form-control" id="ownerName" placeholder="Enter owner name" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addOrder()">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 4 JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function addOrder() {
+            // Get input values
+            let carNumber = document.getElementById("carNumber").value;
+            let ownerName = document.getElementById("ownerName").value;
+            let parkingSlot = document.getElementById("parkingSlot").value;
+
+            if (carNumber === "" || ownerName === "" || parkingSlot === "") {
+                alert("All fields are required!");
+                return;
+            }
+
+            // Create new row
+            let table = document.getElementById("carTableBody");
+            let row = table.insertRow();
+            row.innerHTML = `
+                <td>${carNumber}</td>
+                <td>${ownerName}</td>
+                <td>${parkingSlot}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="editCar(this)">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="removeCar(this)">Remove</button>
+                </td>
+            `;
+
+            // Clear inputs
+            document.getElementById("carForm").reset();
+
+            // Close modal
+            $('#registerCarModal').modal('hide');
+        }
+
+        function editOrder(button) {
+            let row = button.parentElement.parentElement;
+            let cells = row.getElementsByTagName("td");
+
+            let carNumber = prompt("Edit Car Number:", cells[0].innerText);
+            let ownerName = prompt("Edit Owner Name:", cells[1].innerText);
+            let parkingSlot = prompt("Edit Parking Slot:", cells[2].innerText);
+
+            if (carNumber && ownerName && parkingSlot) {
+                cells[0].innerText = carNumber;
+                cells[1].innerText = ownerName;
+                cells[2].innerText = parkingSlot;
+            }
+        }
+
+        function removeOrder(button) {
+            let row = button.parentElement.parentElement;
+            row.remove();
+        }
+
+        function searchOrders() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.getElementById("carTableBody").getElementsByTagName("tr");
+
+            for (let row of rows) {
+                let carNumber = row.cells[0].innerText.toLowerCase();
+                let ownerName = row.cells[1].innerText.toLowerCase();
+                let parkingSlot = row.cells[2].innerText.toLowerCase();
+
+                if (carNumber.includes(input) || ownerName.includes(input) || parkingSlot.includes(input)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

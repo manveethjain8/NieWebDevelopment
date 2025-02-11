@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Pizza</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .text-blue { color: blue; }
+        .text-red { color: red; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-xl navbar-light bg-info">
+        <div class="container-fluid">
+            <a class="navbar-brand text-blue" href="http://127.0.0.1:5502/HTML/pizzaModel.html">Pizza System</a> 
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link text-red" href="http://127.0.0.1:5502/HTML/pizzaModel.html">Pizza</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-blue active" href="http://127.0.0.1:5502/pizzaListing.html">Add Pizza</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container mt-5">
+        <h2 class="text-center text-blue">Add a New Pizza</h2>
+        <form>
+            <div class="form-group">
+                <label class="text-red">Pizza ID</label>
+                <input type="text" class="form-control" placeholder="Enter pizza ID">
+            </div>
+            <div class="form-group">
+                <label class="text-blue">Name</label>
+                <input type="text" class="form-control" placeholder="Enter pizza name">
+            </div>
+            <div class="form-group">
+                <label class="text-red">Size</label>
+                <select class="form-control">
+                    <option>Small</option>
+                    <option>Medium</option>
+                    <option>Large</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="text-blue">Category</label>
+                <input type="text" class="form-control" placeholder="Enter category (e.g., Veg, Non-Veg)">
+            </div>
+            <div class="form-group">
+                <label class="text-blue">Price</label>
+                <input type="text" class="form-control" placeholder="Enter the price">
+            </div>
+            <div class="form-group">
+                <label class="text-blue">Status</label>
+                <input type="text" class="form-control" placeholder="Enter the status">
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="addOrder()">Add Pizza</button>
+            <a href="page.html" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script>
+        function addOrder() {
+            // Get input values
+            let orderId = document.getElementById("orderId").value;
+            let customerName = document.getElementById("customerName").value;
+            let pizzaSize = document.getElementById("pizzaSize").value;
+            let category = document.getElementById("category").value;
+            let price = document.getElementById("price").value;
+
+            if (orderId === "" || customerName === "" || pizzaSize === "" || category === "" || price === "") {
+                alert("All fields are required!");
+                return;
+            }
+
+            // Create new row
+            let table = document.getElementById("orderTableBody");
+            let row = table.insertRow();
+            row.innerHTML = `
+                <td>${orderId}</td>
+                <td>${customerName}</td>
+                <td>${pizzaSize}</td>
+                <td>${category}</td>
+                <td>${price}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="editOrder(this)">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="removeOrder(this)">Remove</button>
+                </td>
+            `;
+
+            // Clear inputs
+            document.getElementById("orderForm").reset();
+
+            // Close modal
+            $('#registerOrderModal').modal('hide');
+        }
+
+        function editOrder(button) {
+            let row = button.parentElement.parentElement;
+            let cells = row.getElementsByTagName("td");
+
+            let orderId = prompt("Edit Order Id:", cells[0].innerText);
+            let customerName = prompt("Edit Customer Name:", cells[1].innerText);
+            let pizzaSize = prompt("Edit Pizza Size:", cells[2].innerText);
+            let category = prompt("Edit Category:", cells[3].innerText);
+            let price = prompt("Edit Price:", cells[4].innerText);
+
+            if (orderId && customerName && pizzaSize && category && price) {
+                cells[0].innerText = orderId;
+                cells[1].innerText = customerName;
+                cells[2].innerText = pizzaSize;
+                cells[3].innerText = category;
+                cells[4].innerText = price;
+            }
+        }
+
+        function removeOrder(button) {
+            let row = button.parentElement.parentElement;
+            row.remove();
+        }
+
+        function searchOrders() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.getElementById("orderTableBody").getElementsByTagName("tr");
+
+            for (let row of rows) {
+                let orderId = row.cells[0].innerText.toLowerCase();
+                let customerName = row.cells[1].innerText.toLowerCase();
+                let pizzaSize = row.cells[2].innerText.toLowerCase();
+                let category = row.cells[3].innerText.toLowerCase();
+
+                if (orderId.includes(input) || customerName.includes(input) || pizzaSize.includes(input) || category.includes(input)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        }
+    </script>
+
+
+</body>
+</html>
