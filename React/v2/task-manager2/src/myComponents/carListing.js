@@ -1,7 +1,27 @@
-import React from 'react';
 import MyMenu from './myMenu.js';
+import React, { useEffect, useState } from "react";
+import MyMenu from './myMenu.js';
+import axios from "axios";  
+import { useNavigate } from "react-router-dom";
 
 function carListing(props) {
+  const [car, setCar]=useState({ID:'',Number:'',Model:'',Type:''});
+
+  const readAllCars=async () => {
+      const baseUrl="http://localhost:3001"
+      try{
+          const response=await axios.get(`${baseUrl}/cars`);
+          const queriedCars=response.data;
+          setCar(queriedCars);
+          alert(response.data.message);
+      }catch(error){
+          alert('Server error');
+      }
+  }
+
+  useEffect(()=>{
+    readAllCars();
+  },[]);
     return (
       <>
         <MyMenu/>
